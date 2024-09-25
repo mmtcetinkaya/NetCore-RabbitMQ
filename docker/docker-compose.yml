@@ -1,0 +1,23 @@
+version: '3.5'
+services:
+  rabbitmq:
+        container_name: hrm_rabbitmq
+
+        image: rabbitmq:3-management
+        
+        ports:
+            - 5112:5672
+            - 5113:15672
+            
+        environment:
+            - "RABBITMQ_DEFAULT_PASS=guest"
+            - "RABBITMQ_DEFAULT_USER=guest"
+
+        volumes:
+            - "rabbitmq:/var/lib/hrm_rabbitmq"
+            
+        restart: unless-stopped
+
+volumes:
+     rabbitmq:
+        driver: local         
