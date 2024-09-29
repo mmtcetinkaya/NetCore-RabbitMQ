@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Rabbitmq.Producer.ProducerInterfaces;
@@ -10,6 +11,13 @@ using Rabbitmq.Utilities.RabbitmqServices;
 using static Rabbitmq.Utilities.RabbitMQConsts;
 
 HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
+
+string? environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+Console.WriteLine("runing environment :" + environmentName);
+builder.Configuration
+    .AddJsonFile($"appsettings.json", true, true)
+    .AddJsonFile($"appsettings.{environmentName}.json", true, true)
+    .AddEnvironmentVariables();
 
 builder.Services.Configure<RabbitMQConfigurationOptions>(builder.Configuration.GetSection(typeof(RabbitMQConfigurationOptions).Name));
 
