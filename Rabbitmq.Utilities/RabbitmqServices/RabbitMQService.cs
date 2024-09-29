@@ -19,6 +19,8 @@ namespace Rabbitmq.Utilities.RabbitmqServices
         {
             try
             {
+                Console.WriteLine("trying to connect rabbitmq");
+                Console.WriteLine(_rabbitMQServiceOptions.HostName + ", " + _rabbitMQServiceOptions.UserName + ", "+ _rabbitMQServiceOptions.Password + ", "+ _rabbitMQServiceOptions.Port);
                 var factory = new ConnectionFactory()
                 {
                     HostName = _rabbitMQServiceOptions.HostName,
@@ -35,13 +37,17 @@ namespace Rabbitmq.Utilities.RabbitmqServices
                 // (TopologyRecoveryEnabled = false   olarak tanımlandığı için)
                 factory.TopologyRecoveryEnabled = false;
 
+                Console.WriteLine("connection Starting");
                 return factory.CreateConnection();
             }
-            catch (BrokerUnreachableException)
+            catch (BrokerUnreachableException ex )
             {
+                Console.WriteLine("failed connect rabbit mq");
+                Console.WriteLine(ex.Message + ex.InnerException != null ? ex.InnerException?.Message : "");
+
+                throw;
                 //TODO throw exception
                 // farklı business ta yapılabilir, ancak biz tekrar bağlantı (connection) kurmayı deneyeceğiz
-                return GetConnection();
             }
         }
 
