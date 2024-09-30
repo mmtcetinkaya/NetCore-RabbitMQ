@@ -32,9 +32,6 @@ namespace Rabbitmq.Consumer.ConsumerServices
 
                 await Task.FromResult(channel.BasicConsume(queue: queueName,
                                         autoAck: false,
-                                        /* autoAck: bir mesajı aldıktan sonra bunu anladığına       
-                                           dair(acknowledgment) kuyruğa bildirimde bulunur ya da timeout gibi vakalar oluştuğunda 
-                                           mesajı geri çevirmek(Discard) veya yeniden kuyruğa aldırmak(Re-Queue) için dönüşler yapar*/
                                         consumer: _consumer));
 
                 _consumer.Received += Consumer_Received;
@@ -63,9 +60,7 @@ namespace Rabbitmq.Consumer.ConsumerServices
                 }
                 finally
                 {
-                    // Teslimat Onayı
                     channel.BasicAck(ea.DeliveryTag, false);
-                    // akışı - thread'i serbest bırakıyoruz ek thread alabiliriz.
                     _semaphore.Release();
                 }
 
