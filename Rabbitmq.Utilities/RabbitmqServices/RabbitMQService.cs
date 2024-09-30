@@ -29,12 +29,8 @@ namespace Rabbitmq.Utilities.RabbitmqServices
                     Port = Convert.ToInt32(_rabbitMQServiceOptions.Port)
                 };
 
-                // Otomatik bağlantı kurtarmayı etkinleştirmek için,
                 factory.AutomaticRecoveryEnabled = true;
-                // Her 10 sn de bir tekrar bağlantı toparlanmaya çalışır 
                 factory.NetworkRecoveryInterval = TimeSpan.FromSeconds(10);
-                // sunucudan bağlantısı kesildikten sonra kuyruktaki mesaj tüketimini sürdürmez 
-                // (TopologyRecoveryEnabled = false   olarak tanımlandığı için)
                 factory.TopologyRecoveryEnabled = false;
 
                 Console.WriteLine("connection Starting");
@@ -46,8 +42,6 @@ namespace Rabbitmq.Utilities.RabbitmqServices
                 Console.WriteLine(ex.Message + ex.InnerException != null ? ex.InnerException?.Message : "");
 
                 throw;
-                //TODO throw exception
-                // farklı business ta yapılabilir, ancak biz tekrar bağlantı (connection) kurmayı deneyeceğiz
             }
         }
 
